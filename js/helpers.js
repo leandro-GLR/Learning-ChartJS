@@ -26,11 +26,15 @@ const getDataColors = (opacity) => {
   return colors.map((color) => (opacity ? `${color + opacity}` : color));
 };
 
+// Recibe todas las montañas rusas y el rango de años establecidos y va a retornar un array con cuantas montañas rusas se han construido en cada una de estas horquillas cronológicas.
 const getCoastersByYear = (coasters, years) => {
+  // Va a crear un nuevo array
   const coastersByYear = years.map((yearsRange) => {
+    // Para cada uno de los rangos va a sacar el año desde que se construyeron hasta el que se construyeron con un split, es decir, el año en el que se empezó a construir y el año final ya construido.
     const [from, to] = yearsRange.split("-");
+    // Por último, va a retornar el año por cada
     return coasters.filter(
-      (eachCoaster) => eachCoaster.year >= from && eachCoaster.year <= to
+      (coaster) => coaster.year >= from && coaster.year <= to
     ).length;
   });
   return coastersByYear;

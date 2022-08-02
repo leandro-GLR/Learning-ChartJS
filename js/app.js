@@ -17,8 +17,10 @@ const printChart = () => {
   )
     // Una vez esté todo listo, voy a recibir un array donde en la primera posición voy a tener todas las montañas y en la segunda las nacionales.
     .then(([allCoasters, nationalCoasters]) => {
+      console.log(allCoasters, nationalCoasters);
       renderModelsChart(allCoasters);
       renderFeaturesChart(nationalCoasters);
+      renderYearsChart(allCoasters);
     });
 };
 
@@ -89,4 +91,42 @@ const renderFeaturesChart = (coasters) => {
   };
 
   new Chart("featuresChart", { type: "radar", data, options });
+};
+
+// * Tercer Chart, en este caso un Chart de tipo linea
+
+const renderYearsChart = (coasters) => {
+  const years = [
+    "1998-2000",
+    "2001-2003",
+    "2004-2006",
+    "2007-2009",
+    "2013-2015",
+    "2016-2018",
+    "2019-2021",
+  ];
+
+  const data = {
+    labels: years,
+    datasets: [
+      {
+        data: getCoastersByYear(coasters, years),
+        // Esto sería la tensión de la línea
+        tension: 0.5,
+        borderColor: getDataColors()[1],
+        backgroundColor: getDataColors(20)[1],
+        // Y tiene una particularidad este Chart y es que por defecto no se rellena, es decir, cuando cualquier Chart o la mayoría de ellos le indicas un background color, este se rellena de una. Por lo tanto, debemos específicarle la propiedad fill:true
+        fill: true,
+        // Los puntos de inflexión o así yo le llamo, apenas se ven, y dentro de los cientos de configuraciones que podemos establecer aquí, una de ellas es controlar tanto el popup, el tool que sale, los puntos, etc etc etc.
+        pointBorderWidth: 5,
+      },
+    ],
+  };
+  const options = {
+    plugins: {
+      legend: { display: false },
+    },
+  };
+
+  new Chart("yearsChart", { type: "line", data, options });
 };
