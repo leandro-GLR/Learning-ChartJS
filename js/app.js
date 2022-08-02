@@ -17,11 +17,10 @@ const printChart = () => {
     // Una vez esté todo listo, voy a recibir un array donde en la primera posición voy a tener todas las montañas y en la segunda las nacionales.
     .then(([allCoasters, nationalCoasters]) => {
       renderModelsChart(allCoasters);
-      console.log(allCoasters, nationalCoasters);
     });
 };
 
-renderModelsChart = (coasters) => {
+const renderModelsChart = (coasters) => {
   // Con esto voy a obtener los nombres de los modelos, pero se van a repetir.
   //const models = coasters.map((coaster) => coaster.model);
 
