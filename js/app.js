@@ -7,6 +7,7 @@
 
 // * Algo interesante y que hay que saber, es que por norma general cuando tu tienes un juego de Charts dentro de un producto, todos comparten algunas características, en este caso en partícular, el color del texto que es blanco. Esto, ChartJS lo resuelve de forma global, podemos aplicar valores por defecto a todos los Charts.
 Chart.defaults.color = "#fff";
+// * Esto lo hacemos principalmente por el featuresChart, configurando el tercer punto de que no se ve el radar.
 Chart.defaults.borderColor = "#444";
 
 const printChart = () => {
@@ -17,6 +18,7 @@ const printChart = () => {
     // Una vez esté todo listo, voy a recibir un array donde en la primera posición voy a tener todas las montañas y en la segunda las nacionales.
     .then(([allCoasters, nationalCoasters]) => {
       renderModelsChart(allCoasters);
+      renderFeaturesChart(nationalCoasters);
     });
 };
 
@@ -54,3 +56,37 @@ const renderModelsChart = (coasters) => {
 };
 
 printChart();
+
+// * Ahora toca el gráfico de tipo radar, todavía no vamos a resolver la interacción sino que simplemente vamos a trazar el Chart en relación a la altura de cada una de las montañas rusas, pero únicamente de las nacionales.
+
+const renderFeaturesChart = (coasters) => {
+  // * OJO, empezó renderizando la label altura porque por defecto es la que siempre va a estar seleccionado cuando apenas se cargue la página.
+  const data = {
+    labels: coasters.map((coaster) => coaster.name),
+    // En este caso en los datasets, hay una particularidad, en ciertos Charts como este cada uno de los datasets puede tener su label porque tenemos las labels a nivel de Chart pero luego la comparativa puede estar referida a una u otra propiedad, como es en este caso.
+    datasets: [
+      {
+        label: "Altura (m)",
+        data: coasters.map((coaster) => coaster.height),
+        // Voy a utilizar la misma paleta de colores, pero en este caso solamente me voy a pillar el primer color porque este Chart no tiene diferentes colores
+        borderColor: getDataColors()[0],
+        backgroundColor: getDataColors(20)[0],
+      },
+    ],
+  };
+
+  const options = {
+    plugins: {
+      // Con esto configuramos el primer punto de que no queremos mostrar los labels.
+      legend: { display: false },
+    },
+    // Con esta propiedad, en todos los Charts, podemos modificar si se ven o no se ven las escalas vertical horizontal x y o si que tengan legend a nivel escala, el mínimo, el máximo, un millón de movidas.
+    scales: {
+      r: {
+        ticks: { display: false },
+      },
+    },
+  };
+
+  new Chart("featuresChart", { type: "radar", data, options });
+};
